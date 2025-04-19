@@ -9,6 +9,7 @@ class NavBar extends Component {
       <nav className="navbar">
         <NavLink to="/teams">Teams</NavLink>
         <NavLink to="/calendar">Calendar</NavLink>
+        <NavLink to="/status">Status</NavLink>
       </nav>
     );
   }

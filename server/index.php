@@ -3,6 +3,7 @@ include_once("config.php");
 include_once("dbconnection.php");
 include_once("./models/teams.php");
 include_once("./models/calendar.php");
+include_once("./models/status.php");
 
 header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, PATCH, OPTIONS');
@@ -27,6 +28,7 @@ if (sizeof($path) < 1) {
 
 $teams = new Teams($db);
 $calendar = new Calendar($teams->getNames());
+$statusService = new StatusService();
 $method = $_SERVER["REQUEST_METHOD"];
 $uri = $path[0];
 $resource = $uri[0];
@@ -138,6 +140,23 @@ else if ($resource == '/calendar') {
       "error" => array(
         "status" => "404",
         "message" => "Bad URL. Wrong method for resource '" . $resource . "'."
+      )
+    );
+
+    echo json_encode($err);
+    exit();
+  }
+}
+else if ($resource == '/status') {
+  if ($method == 'GET') {
+    // Return system status and API information
+    echo json_encode($statusService->getStatus());
+  }
+  else {
+    $err = array(
+      "error" => array(
+        "status" => "405",
+        "message" => "Method not allowed. The /status endpoint only supports GET requests."
       )
     );
 
